@@ -9,14 +9,14 @@ import (
 )
 
 type Client struct {
-	Ltuid   int
+	Ltuid   string
 	Ltoken  string
 	Chinese bool
 }
 
 func NewClient(Ltuid int, Ltoken string, Chinese bool) *Client {
 	return &Client{
-		Ltuid:   Ltuid,
+		Ltuid:   strconv.Itoa(Ltuid),
 		Ltoken:  Ltoken,
 		Chinese: Chinese,
 	}
@@ -28,7 +28,7 @@ func (c *Client) GET(endpoint string) []byte {
 	defer fasthttp.ReleaseRequest(req)
 	defer fasthttp.ReleaseResponse(res)
 
-	req.Header.SetCookie("ltuid", strconv.Itoa(c.Ltuid))
+	req.Header.SetCookie("ltuid", c.Ltuid)
 	req.Header.SetCookie("ltoken", c.Ltoken)
 	req.Header.Set("ds", utils.GenerateDs())
 	req.Header.Set("x-rpc-app_version", "1.5.0")
@@ -52,7 +52,7 @@ func (c *Client) POST(endpoint string, data []byte) []byte {
 
 	req.SetBody(data)
 	req.Header.SetMethod("POST")
-	req.Header.SetCookie("ltuid", strconv.Itoa(c.Ltuid))
+	req.Header.SetCookie("ltuid", c.Ltuid)
 	req.Header.SetCookie("ltoken", c.Ltoken)
 	req.Header.SetContentType("application/json")
 	req.Header.SetUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")
