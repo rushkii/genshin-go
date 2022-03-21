@@ -21,7 +21,6 @@ type RawAbyss struct {
 	EnergySkillRank  []Rank  `json:"energy_skill_rank"`
 	Floors           []Floor `json:"floors"`
 	TotalStar        int64   `json:"total_star"`
-	IsUnlock         bool    `json:"is_unlock"`
 }
 
 type Rank struct {
