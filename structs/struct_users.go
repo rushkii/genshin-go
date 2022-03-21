@@ -1,10 +1,10 @@
 package structs
 
 type Users struct {
-	Characters []SimpleCharacters `json:"characters"`
 	Stats      Stats              `json:"stats"`
 	Worlds     []Worlds           `json:"explorations"`
 	Teapots    Teapots            `json:"teapots"`
+	Characters []SimpleCharacters `json:"characters"`
 }
 
 type SimpleCharacters struct {
@@ -32,7 +32,7 @@ type Stats struct {
 	LuxuriousChest int64  `json:"luxurious_chest"`
 	ExquisiteChest int64  `json:"exquisite_chest"`
 	CommonChest    int64  `json:"common_chest"`
-	MagicChest     int64  `json:"magic_chest"`
+	RemarkChest    int64  `json:"remarkable_chest"`
 }
 
 type Worlds struct {

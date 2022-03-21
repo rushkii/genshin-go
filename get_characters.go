@@ -3,8 +3,7 @@ package genshin
 import (
 	"bytes"
 	"encoding/json"
-	"log"
-	"strconv"
+	"fmt"
 
 	"github.com/rushkii/genshin-go/parser"
 	"github.com/rushkii/genshin-go/raws"
@@ -12,21 +11,16 @@ import (
 	"github.com/rushkii/genshin-go/utils"
 )
 
-func (c *Client) GetCharacters(uid int) (*[]structs.Characters, error) {
+func (c *Client) GetCharacters(uid string) (*[]structs.Characters, error) {
 	var raw_data raws.RawCharsData
-	var err error
-
-	data, err := json.Marshal(map[string]string{
-		"role_id": strconv.Itoa(uid),
-		"server":  utils.GetServer(uid),
-	})
-	if err != nil {
-		log.Println(err)
-	}
+	data := []byte(fmt.Sprintf(`{
+		"role_id": "%s",
+		"server": "%s"
+	}`, uid, utils.GuessServer(uid)))
 
 	body := bytes.NewBuffer(c.POST("/genshin/api/character", data))
 
-	if err = json.NewDecoder(body).Decode(&raw_data); err != nil {
+	if err := json.NewDecoder(body).Decode(&raw_data); err != nil {
 		return &[]structs.Characters{}, err
 	}
 

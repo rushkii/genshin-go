@@ -1,6 +1,7 @@
 package genshin
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 
@@ -10,9 +11,8 @@ import (
 	"github.com/rushkii/genshin-go/utils"
 )
 
-func (c *Client) GetUserStats(uid int) (*structs.Users, error) {
+func (c *Client) GetUserStats(uid string) (*structs.Users, error) {
 	var raw_data raws.RawUsersData
-	var err error
 
 	// users, err := c.Database.DBGetUserStats(uid)
 	// if err == nil {
@@ -22,9 +22,11 @@ func (c *Client) GetUserStats(uid int) (*structs.Users, error) {
 
 	// }
 
-	body := c.GET(fmt.Sprintf("/genshin/api/index?server=%s&role_id=%d", utils.GetServer(uid), uid))
+	body := bytes.NewBuffer(c.GET(fmt.Sprintf(
+		"/genshin/api/index?server=%s&role_id=%s", utils.GuessServer(uid), uid,
+	)))
 
-	if err = json.Unmarshal(body, &raw_data); err != nil {
+	if err := json.NewDecoder(body).Decode(&raw_data); err != nil {
 		return &structs.Users{}, err
 	}
 

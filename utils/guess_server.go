@@ -1,10 +1,6 @@
 package utils
 
-import (
-	"strconv"
-)
-
-func GetServer(uid int) string {
+func GuessServer(uid string) string {
 	var res string
 
 	server := map[string]string{
@@ -18,7 +14,7 @@ func GetServer(uid int) string {
 	}
 
 	for k, v := range server {
-		if k == strconv.Itoa(uid)[0:1] {
+		if k == uid[0:1] {
 			res = v
 		}
 	}

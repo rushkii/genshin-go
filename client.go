@@ -14,8 +14,6 @@ type Client struct {
 	Chinese bool
 }
 
-var client = &fasthttp.Client{}
-
 func NewClient(Ltuid int, Ltoken string, Chinese bool) *Client {
 	return &Client{
 		Ltuid:   Ltuid,
@@ -39,7 +37,7 @@ func (c *Client) GET(endpoint string) []byte {
 	req.Header.SetUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")
 	req.SetRequestURI("https://bbs-api-os.hoyoverse.com/game_record" + endpoint)
 
-	if err := client.Do(req, res); err != nil {
+	if err := fasthttp.Do(req, res); err != nil {
 		log.Panicln("Request Err:", err)
 	}
 
@@ -64,7 +62,7 @@ func (c *Client) POST(endpoint string, data []byte) []byte {
 	req.Header.Set("x-rpc-client_type", "5")
 	req.Header.Set("x-rpc-language", "en-us")
 
-	if err := client.Do(req, res); err != nil {
+	if err := fasthttp.Do(req, res); err != nil {
 		log.Panicln("Request Err:", err)
 	}
 
