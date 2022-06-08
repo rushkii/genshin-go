@@ -12,7 +12,6 @@ type Client struct {
 	Ltuid  string
 	Ltoken string
 	IsCn   bool
-	config Config
 }
 
 func NewClient(ltuid int, ltoken string, iscn bool) *Client {
