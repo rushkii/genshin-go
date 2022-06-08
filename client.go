@@ -9,16 +9,17 @@ import (
 )
 
 type Client struct {
-	Ltuid   string
-	Ltoken  string
-	Chinese bool
+	Ltuid  string
+	Ltoken string
+	IsCn   bool
+	config Config
 }
 
-func NewClient(Ltuid int, Ltoken string, Chinese bool) *Client {
+func NewClient(ltuid int, ltoken string, iscn bool) *Client {
 	return &Client{
-		Ltuid:   strconv.Itoa(Ltuid),
-		Ltoken:  Ltoken,
-		Chinese: Chinese,
+		Ltuid:  strconv.Itoa(ltuid),
+		Ltoken: ltoken,
+		IsCn:   iscn,
 	}
 }
 
@@ -61,6 +62,23 @@ func (c *Client) POST(endpoint string, data []byte) []byte {
 	req.Header.Set("x-rpc-app_version", "1.5.0")
 	req.Header.Set("x-rpc-client_type", "5")
 	req.Header.Set("x-rpc-language", "en-us")
+
+	if err := fasthttp.Do(req, res); err != nil {
+		log.Panicln("Request Err:", err)
+	}
+
+	return res.Body()
+}
+
+func EnkaReq(uid string) []byte {
+	req := fasthttp.AcquireRequest()
+	res := fasthttp.AcquireResponse()
+	defer fasthttp.ReleaseRequest(req)
+	defer fasthttp.ReleaseResponse(res)
+
+	req.Header.SetContentType("application/json")
+	req.Header.SetUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")
+	req.SetRequestURI("https://enka.shinshin.moe/u/" + uid + "/__data.json")
 
 	if err := fasthttp.Do(req, res); err != nil {
 		log.Panicln("Request Err:", err)
